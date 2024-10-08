@@ -4,7 +4,7 @@
     <div class="w-full lg:w-1/3 bg-gray-400/90 flex flex-col justify-center items-center p-8 shadow-lg">
       <div class="text-center mb-8">
         <h1 class="text-7xl font-bold mb-2">Oversee</h1>
-        <p class="text-black">Seja bem vindo! <a href="#" class="text-blue-700 hover:underline">Registrar</a></p>
+        <p class="text-black">Seja bem vindo! <a href="/cadastro-prestador" class="text-blue-700 hover:underline">Registrar</a></p>
       </div>
 
       <div class="w-full max-w-xs">
@@ -19,7 +19,7 @@
         <!-- Password -->
         <div class="mb-5">
           <FloatLabel>
-            <Password v-model="password" inputId="senha" pt:root="!w-full" inputClass="w-full !bg-white !text-black !border-white"/>
+            <Password v-model="password" inputId="senha" pt:root="!w-full" inputClass="w-full !bg-white !text-black !border-white" :feedback="false"/>
             <label for="senha" class="!text-gray-500">Senha</label>
             <i id="verSenha" class="absolute right-3 top-3 cursor-pointer text-white hover:scale-110 duration-75 ease-linear" :class="showPassword ? `pi pi-eye-slash` : `pi pi-eye`" @click="togglePasswordVisibility"></i>
           </FloatLabel>
