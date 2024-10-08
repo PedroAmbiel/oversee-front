@@ -1,13 +1,15 @@
 <template>
+  <Toast position="top-left" />
   <div class="flex min-h-screen text-black">
     <!-- Left Panel (Login Form) -->
     <div class="w-full lg:w-1/3 bg-gray-400/90 flex flex-col justify-center items-center p-8 shadow-lg">
       <div class="text-center mb-8">
         <h1 class="text-7xl font-bold mb-2">Oversee</h1>
         <p class="text-black">Seja bem vindo! <a href="/cadastro-prestador" class="text-blue-700 hover:underline">Registrar</a></p>
-      </div>
+      </div> 
 
       <div class="w-full max-w-xs">
+        <form @submit.prevent="login">
         <!-- Email -->
         <div class="mb-6">
           <FloatLabel>
@@ -19,9 +21,8 @@
         <!-- Password -->
         <div class="mb-5">
           <FloatLabel>
-            <Password v-model="password" inputId="senha" pt:root="!w-full" inputClass="w-full !bg-white !text-black !border-white" :feedback="false"/>
+            <Password v-model="password" inputId="senha" pt:root="!w-full" inputClass="w-full !bg-white !text-black !border-white" :feedback="false" toggleMask />
             <label for="senha" class="!text-gray-500">Senha</label>
-            <i id="verSenha" class="absolute right-3 top-3 cursor-pointer text-white hover:scale-110 duration-75 ease-linear" :class="showPassword ? `pi pi-eye-slash` : `pi pi-eye`" @click="togglePasswordVisibility"></i>
           </FloatLabel>
         </div>
 
@@ -48,10 +49,11 @@
 
         <!-- Login Button -->
         <div class="mb-4">
-          <button class="bg-black text-white w-full py-2 rounded-lg shadow-md hover:bg-gray-800 transition-all hover:-translate-y-1">
+          <button class="bg-black text-white w-full py-2 rounded-lg shadow-md hover:bg-gray-800 transition-all hover:-translate-y-1" type="submit">
             Login
           </button>
         </div>
+      </form>
 
         <!-- Login with Google -->
         <!-- <div class="mb-4">
@@ -69,24 +71,42 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      email: '',
-      password: '',
-      showPassword: false,
-      checked: false,
-    };
-  },
-  methods: {
-    togglePasswordVisibility() {
-      this.showPassword = !this.showPassword;
-      const passwordField = document.getElementById('senha');
-      passwordField.type = this.showPassword ? 'text' : 'password';
+<script setup>
+import Toast from 'primevue/toast';
+  const toast = useToast();
+
+  const email = ref('')
+  const password = ref('')
+  const checked = ref(false)
+
+    
+  async function login(){
+    if(!email.value && !password.value){
+      toast.add({severity: 'error', summary: "Informe o usuário e senha", life: 3000})
+      return
     }
-  },
-  
+    await useFetch('http://localhost:8080/api/prestador/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: {
+        cpf: email.value,
+        senha: password.value
+      },
+
+      onResponse({request, response, options}){
+        if(response.status == 200){
+          console.log(response._data.nome)
+          useRouter().push('/')
+        }
+      },
+      onResponseError({ request, response, options }) {
+        if(response.status == 401){
+          toast.add({severity: 'error', summary: response._data, life: 3000})
+        } 
+      }
+    })
 }
 </script>
 
