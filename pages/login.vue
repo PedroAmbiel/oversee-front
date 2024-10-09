@@ -3,13 +3,15 @@
   <div class="flex min-h-screen text-black">
     <!-- Left Panel (Login Form) -->
     <div class="w-full lg:w-1/3 bg-gray-400/90 flex flex-col justify-center items-center p-8 shadow-lg">
+      <img src="../assets/images/over.png" class="w-32" :hidden="!focus">
+      <img src="../assets/images/over0.png" class="w-32" :hidden="focus">
       <div class="text-center mb-8">
         <h1 class="text-7xl font-bold mb-2">Oversee</h1>
         <p class="text-black">Seja bem vindo! <a href="/cadastro-prestador" class="text-blue-700 hover:underline">Registrar</a></p>
       </div> 
 
       <div class="w-full max-w-xs">
-        <form @submit.prevent="login">
+        <form @submit.prevent="validarLogin">
         <!-- Email -->
         <div class="mb-6">
           <FloatLabel>
@@ -21,13 +23,15 @@
         <!-- Password -->
         <div class="mb-5">
           <FloatLabel>
-            <Password v-model="password" inputId="senha" pt:root="!w-full" inputClass="w-full !bg-white !text-black !border-white" :feedback="false" toggleMask />
+            <Password v-model="password" inputId="senha" pt:root="!w-full" inputClass="w-full !bg-white !text-black !border-white" 
+            @focus="focus = false" @blur="focus = true" :feedback="false" toggleMask />
             <label for="senha" class="!text-gray-500">Senha</label>
           </FloatLabel>
+          <NuxtLink to="/trocar-senha" class="text-blue-700 text-sm hover:underline"><span>Esqueci minha senha</span></NuxtLink>
         </div>
 
         <!-- Remember Me -->
-        <div class="mb-4">
+        <!-- <div class="mb-4">
           <label class="inline-flex items-center">
             <Checkbox v-model="checked" :binary="true" pt:input:class="!bg-white"
             :pt="{
@@ -45,7 +49,7 @@
             />
             <span class="ml-2 text-white">Lembre-me</span>
           </label>
-        </div>
+        </div> -->
 
         <!-- Login Button -->
         <div class="mb-4">
@@ -54,7 +58,6 @@
           </button>
         </div>
       </form>
-
         <!-- Login with Google -->
         <!-- <div class="mb-4">
           <button class="w-full flex items-center justify-center bg-gray-200 py-2 rounded-lg shadow-md hover:bg-gray-300 transition-all">
@@ -73,41 +76,29 @@
 
 <script setup>
 import Toast from 'primevue/toast';
-  const toast = useToast();
+  const toast = useToast()
+  const user = userStore()
 
   const email = ref('')
   const password = ref('')
-  const checked = ref(false)
+  const focus = ref(true)
 
     
-  async function login(){
-    if(!email.value && !password.value){
+  async function validarLogin(){
+    if(!email.value || !password.value){
       toast.add({severity: 'error', summary: "Informe o usuário e senha", life: 3000})
-      return
+      return false
     }
-    await useFetch('http://localhost:8080/api/prestador/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: {
-        cpf: email.value,
-        senha: password.value
-      },
 
-      onResponse({request, response, options}){
-        if(response.status == 200){
-          console.log(response._data.nome)
-          useRouter().push('/')
-        }
-      },
-      onResponseError({ request, response, options }) {
-        if(response.status == 401){
-          toast.add({severity: 'error', summary: response._data, life: 3000})
-        } 
-      }
-    })
-}
+    var msg = await user.login(email.value, password.value)
+  
+    if(msg == 'T'){
+      useRouter().push('/painel')
+    }else{
+      toast.add({severity: 'error', summary: msg, life: 3000})
+    }
+  }
+
 </script>
 
 <style>

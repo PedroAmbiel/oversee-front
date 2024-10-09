@@ -4,7 +4,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
   css: ['~/assets/css/main.css'],
-  modules: ['@nuxtjs/tailwindcss', '@primevue/nuxt-module', "@pinia/nuxt"],
+  modules: ['@nuxtjs/tailwindcss', '@primevue/nuxt-module', '@pinia/nuxt', 'pinia-plugin-persistedstate/nuxt'],
   primevue: {
     options: {
       theme: {

@@ -96,7 +96,8 @@
       onResponse({request, response, options}){
         if(response.status == 200){
           toast.add({severity: 'success', summary: response._data, life: 5000})
-          useRouter().push("/login")
+          useRouter().removeRoute('/cadastro-empresa')
+          useRouter().push("/painel")
         }
       },
 
