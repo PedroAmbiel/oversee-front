@@ -9,7 +9,8 @@ export const userStore = defineStore({
     email: null,
     telefone: null,
     cpf: null,
-    dataNascimento: null
+    dataNascimento: null,
+    empresaCadastrada: false
   }),
   persist:{
     storage: piniaPluginPersistedstate.localStorage(),
@@ -58,7 +59,7 @@ export const userStore = defineStore({
   },
 
   isAutenticado(){
-    if(this.idPrestador != null && this.idPrestador != undefined){
+    if(this.idPrestador){
       return true
     }else{
       return false
@@ -75,6 +76,7 @@ export const userStore = defineStore({
       onResponse({options, request, response, error}){
         if(response.status == 200){
           router.push('/painel')
+          userStore().empresaCadastrada = true
         }
       },
       onResponseError({ request, options, error, response }) {

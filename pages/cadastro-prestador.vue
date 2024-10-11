@@ -97,7 +97,6 @@
       },
 
       onResponseError({ request, response, options }) {
-        console.log(cpf.value.replace(/[^\d]/g, ''))
         toast.add({severity: 'error', summary: response._data, life: 3000})
       } 
     })

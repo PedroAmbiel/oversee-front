@@ -1,0 +1,46 @@
+<template>
+  <div class="flex flex-col font-sans h-screen overflow-hidden">
+    <!-- Header -->
+    <header class="flex items-center bg-gray-300 p-4">
+      <div class="flex items-center space-x-2">
+        <Button class="p-button-text" > <i class="pi pi-user text-2xl text-black" /></Button>
+        <span class="text-black text-2xl">Bem vindo, <span class="underline">{{ userStore().nome.toUpperCase() }}</span></span>
+      </div>
+    </header>
+
+    <div class="flex h-full ">
+      <!-- Oversee Section -->
+      <div class="flex-1 text-center content-center relative bg-white">
+        <h1 class=" text-8xl font-bold inset-0 self-center z-10 text-black">Oversee</h1>
+        <img
+          class="rounded-tr-[200px] rounded-tl-[200px] mt-10 mx-auto w-2/3"
+          src="../assets/images/Oversee.png"
+          alt="Desk with Calendar"
+        />
+      </div>
+
+      <!-- Sidebar -->
+      <div class="flex flex-col items-center bg-gradient-to-br from-gray-600 to-gray-900 justify-between text-white p-6 w-1/4 h-auto text-center">
+        <!-- <h2 class="text-3xl mb-10">Category</h2> -->
+        
+          <Button icon="pi pi-user" label="Perfil do Cliente" pt:label:class="ml-5 !text-2xl text-black text-center" pt:icon:class="text-2xl text-black" class="w-3/4 p-button-outlined text-left !py-6 !h-44 !bg-white !rounded-3xl"></Button>
+          <Button icon="pi pi-chart-bar" label="Relatórios" pt:label:class="ml-5 !text-2xl text-black" pt:icon:class="text-2xl text-black" class="w-3/4 p-button-outlined text-left !py-6 !h-44 !bg-white !rounded-3xl"></Button>
+          <Button icon="pi pi-calendar" label="Calendário" pt:label:class="ml-5 !text-2xl text-black" pt:icon:class="text-2xl text-black" class="w-3/4 p-button-outlined text-left !py-6 !h-44 !bg-white !rounded-3xl"></Button>
+          <Button icon="pi pi-file" label="Documentos" pt:label:class="ml-5 !text-2xl text-black" pt:icon:class="text-2xl text-black" class="w-3/4 p-button-outlined text-left !py-6 !h-44 !bg-white !rounded-3xl"></Button>
+        
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+
+definePageMeta({
+  middleware: 'auth'
+})
+
+</script>
+
+<style scoped>
+/* Import Tailwind's CSS in your project configuration (tailwind.config.js) or in your main CSS file */
+</style>

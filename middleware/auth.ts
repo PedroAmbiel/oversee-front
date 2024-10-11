@@ -1,15 +1,16 @@
 export default defineNuxtRouteMiddleware((to, from) => {
 
-    if(from.path == '/login' && to.path == '/painel'){
-        console.log("passou no middleware")
+    if(userStore().isAutenticado() && userStore().empresaCadastrada == false){
         userStore().possuiEmpresaCadastrada()
     }
+
+    // if(from.path == '/login' && to.path == '/painel'){
+    //     userStore().possuiEmpresaCadastrada()
+    // }
     
     if(to.path != '/login' && !userStore().isAutenticado()){
         return navigateTo('/login')
-    }
-
-    if(to.path != '/novo-prestador' && !userStore().isAutenticado()){
+    }else if(to.path != '/novo-prestador' && !userStore().isAutenticado()){
         return navigateTo('/login') 
     }
 
