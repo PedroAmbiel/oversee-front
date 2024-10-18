@@ -85,6 +85,10 @@ export const userStore = defineStore({
           }
       }
     })
-  }
+  },
+
+  limparUserStore(){
+    this.$reset()
+  },
 
 }})
