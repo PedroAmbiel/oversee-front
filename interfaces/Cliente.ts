@@ -7,3 +7,9 @@ export class Cliente{
     fkPrestador: number = 0;
     dataCadastro: Date = new Date();
 }
+
+export enum TipoAgendamento {
+    REUNIAO = 'Reunião',
+    SERVICO = 'Serviço',
+    OUTRO = 'Outro',
+}

@@ -39,7 +39,7 @@ function goToRelatorio(){
 }
 
 function goToCalendario(){
-  useRouter().push('/clientes')
+  useRouter().push('/calendario')
 }
 
 function goToDocumento(){
