@@ -5,12 +5,9 @@
 </template>
 
 <script lang="ts" setup>
-const auth = userStore()
-
-auth.limparUserStore();
-
-useRouter().push('/login')
-
+  const auth = userStore()
+  auth.limparUserStore();
+  useRouter().push('/login')
 </script>
 
 <style>

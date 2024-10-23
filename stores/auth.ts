@@ -26,9 +26,6 @@ export const userStore = defineStore({
       let msg; 
       await useFetch('http://localhost:8080/api/prestador/login', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
         body: {
           cpf: email,
           senha: password

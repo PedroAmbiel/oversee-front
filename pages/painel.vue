@@ -43,7 +43,7 @@ function goToCalendario(){
 }
 
 function goToDocumento(){
-  useRouter().push('/clientes')
+  useRouter().push('/documentos')
 }
 
 definePageMeta({

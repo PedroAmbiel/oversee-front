@@ -13,3 +13,9 @@ export enum TipoAgendamento {
     SERVICO = 'Serviço',
     OUTRO = 'Outro',
 }
+
+export enum TipoDocumento{
+    NOTA_FISCAL = "Nota Fiscal",
+    CONTRATO = "Contrato",
+    OUTRO = "Outro",
+}
