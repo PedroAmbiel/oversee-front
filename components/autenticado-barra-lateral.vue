@@ -12,7 +12,7 @@
           <!-- Icon and Name -->
           <a
             :href="item.path"
-            class="flex p-10 hover:bg-gray-500 transition-colors duration-300" :class="{'bg-gray-600' : route.name.split('/')[0] == item.path, 'bg-black' : menuAberto }"
+            class="flex p-6 hover:bg-gray-500 transition-colors duration-300" :class="{'bg-gray-600' : route.name.split('/')[0] == item.path, 'bg-black' : menuAberto }"
           >
             <!-- Name of Icon (Appears to the left on hover) -->
             <span
@@ -31,7 +31,7 @@
       <!-- Log Out Icon (Fixed at the bottom) -->
       <a 
         href="/desconectar"
-        class="flex items-center p-10 hover:bg-gray-500 transition-colors duration-300 absolute w-full"
+        class="flex items-center p-6 hover:bg-gray-500 transition-colors duration-300 absolute w-full"
       >
         <!-- Name of Icon (Appears to the left on hover) -->
         <span

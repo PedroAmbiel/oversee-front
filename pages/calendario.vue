@@ -306,6 +306,7 @@ async function cadastrarAgendamento(){
     toast.add({severity: 'warning', summary: 'Informe o tipo de agendamento', life: 3000})
     return
   }
+  console.log(horarioFim.value)
 
   await useFetch('http://localhost:8080/api/agendamento/novo', {
     method: 'POST',
@@ -396,6 +397,7 @@ const openDialog = (day) => {
   horarioFim.value.setDate(day.date)
   horarioFim.value.setMonth(selectedMonth.value-1)
   horarioFim.value.setFullYear(selectedYear.value)
+  
   selectedDay.value = new Date(selectedYear.value, selectedMonth.value - 1, day.date)
   dialogVisible.value = true
   buscarClientes();

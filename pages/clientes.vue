@@ -35,7 +35,7 @@
 
   <Dialog v-model:visible="visible" modal header="Registrar Cliente" :style="{ width: '25rem' }">
     <div class="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
-    <form @submit.prevent="submitForm">
+    <form @submit.prevent="cadastrarCliente()">
       <!-- Nome Completo -->
       <div class="mb-4">
         <label for="nomeCompleto" class="block text-gray-700 font-bold mb-2">Nome Completo</label>
@@ -45,7 +45,9 @@
       <!-- Data de Nascimento -->
       <div class="mb-4">
         <label for="dataNascimento" class="block text-gray-700 font-bold mb-2">Data de Nascimento</label>
-        <Calendar v-model="dataNascimento" id="dataNascimento" dateFormat="dd/mm/yy" showIcon class="w-full p-inputtext-sm" :required="true" />
+        <DatePicker v-model="dataNascimento" id="dataNascimento" dateFormat="dd/mm/yy"
+        :max-date="new Date()" showIcon class="w-full " :required="true" 
+        input-class="!w-full" />
       </div>
       
       <!-- RG -->
@@ -62,7 +64,7 @@
       
       <!-- Submit Button -->
       <div class="mt-6">
-        <Button label="Cadastrar" type="submit" class="w-full p-button-sm !bg-black !text-white" @click="cadastrarCliente(); visible=false"/>
+        <Button label="Cadastrar" type="submit" class="w-full p-button-sm !bg-black !text-white"/>
       </div>
     </form>
   </div>
@@ -132,7 +134,8 @@ const columns = [
       rg: rg.value.replace(/[^\d]/g, ''),
       cpf: cpf.value.replace(/[^\d]/g, ''),
       fkPrestador: userStore().idPrestador,
-      dataCadastro: new Date
+      dataCadastro: new Date,
+      cancelado: false,
     },
     onResponse({ request, response, options }) {
         if(response.status == 200){
@@ -143,12 +146,19 @@ const columns = [
           cpf.value = '';
 
           buscarClientes()
-          console.log(clientes.value[0])
+          // console.log(clientes.value[0])
+          visible.value = false
         }
     },
     onResponseError({ request, response, options }) {
+        if(response.status == 400){
+          toast.add({severity: 'error', summary: 'Erro: ' + response._data, life: 3000})
+        }
         if(response.status == 500){
-              
+          toast.add({severity: 'error', summary: 'Erro: ' + response._data, life: 3000})
+        }
+        if(response.status == 404){
+          toast.add({severity: 'error', summary: 'Erro: ' + response._data, life: 3000})
         }
     }
   })
@@ -158,34 +168,33 @@ const columns = [
 
 
 
+//Format
 
+const formatDate = (value) => {
+var data = new Date(value).toLocaleDateString('pt-BR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    timeZone: 'UTC'
+    //Deixar com UTC, pois transforma a data do banco em 2024-10-14 em 'Tue, 14 Oct 2024 00:00:00 UTC', 
+    //quando aplica o GMT brasil faz -3 na hora e transfomr em dia 13/10
+});
 
-  //Format
+return data
+};
 
-  const formatDate = (value) => {
-    var data = new Date(value).toLocaleDateString('pt-BR', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-        timeZone: 'UTC'
-        //Deixar com UTC, pois transforma a data do banco em 2024-10-14 em 'Tue, 14 Oct 2024 00:00:00 UTC', 
-        //quando aplica o GMT brasil faz -3 na hora e transfomr em dia 13/10
-    });
+const formatCpf = (value) =>{
+  var src = /^(\d{3})(\d{3})(\d{3})(\d{2})$/
+  var dst = '$1.$2.$3-$4'
+  return value.replace(src, dst)
+}
 
-    return data
-  };
+const formatRG = (value) =>{
+  var src = /^(\d{2})(\d{3})(\d{3})(\d{2})$/
+  var dst = '$1.$2.$3-$4'
+  return value.replace(src, dst)
+}
 
-  const formatCpf = (value) =>{
-    var src = /^(\d{3})(\d{3})(\d{3})(\d{2})$/
-    var dst = '$1.$2.$3-$4'
-    return value.replace(src, dst)
-  }
-
-  const formatRG = (value) =>{
-    var src = /^(\d{2})(\d{3})(\d{3})(\d{2})$/
-    var dst = '$1.$2.$3-$4'
-    return value.replace(src, dst)
-  }
 
 definePageMeta({
   middleware: 'auth'

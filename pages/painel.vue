@@ -15,13 +15,13 @@
       </div>
 
       <!-- Sidebar -->
-      <div class="flex flex-col items-center bg-gradient-to-br from-gray-600 to-gray-900 justify-between text-white p-6 w-1/4 h-auto text-center">
+      <div class="flex flex-col items-center bg-gradient-to-br from-gray-600 to-gray-900 justify-between text-white p-6 w-1/4 gap-y-4 h-auto text-center">
         <!-- <h2 class="text-3xl mb-10">Category</h2> -->
         
-          <Button @click="goToCliente()" icon="pi pi-user" label="Perfil do Cliente" pt:label:class="ml-5 !text-2xl text-black text-center" pt:icon:class="text-2xl text-black" class="w-3/4 p-button-outlined text-left !py-6 !h-44 !bg-white !rounded-3xl hover:!bg-gray-300"></Button>
-          <Button @click="goToRelatorio()" icon="pi pi-chart-bar" label="Relatórios" pt:label:class="ml-5 !text-2xl text-black" pt:icon:class="text-2xl text-black" class="w-3/4 p-button-outlined text-left !py-6 !h-44 !bg-white !rounded-3xl hover:!bg-gray-300"></Button>
-          <Button @click="goToCalendario()" icon="pi pi-calendar" label="Calendário" pt:label:class="ml-5 !text-2xl text-black" pt:icon:class="text-2xl text-black" class="w-3/4 p-button-outlined text-left !py-6 !h-44 !bg-white !rounded-3xl hover:!bg-gray-300"></Button>
-          <Button @click="goToDocumento()" icon="pi pi-file" label="Documentos" pt:label:class="ml-5 !text-2xl text-black" pt:icon:class="text-2xl text-black" class="w-3/4 p-button-outlined text-left !py-6 !h-44 !bg-white !rounded-3xl hover:!bg-gray-300"></Button>
+          <Button @click="goToCliente()" icon="pi pi-user" label="Perfil do Cliente" pt:label:class="ml-5 !text-2xl text-black text-center" pt:icon:class="text-2xl text-black" class="w-3/4 p-button-outlined text-left !py-6 !h-2/4 !bg-white !rounded-3xl hover:!bg-gray-300"></Button>
+          <Button @click="goToRelatorio()" icon="pi pi-chart-bar" label="Relatórios" pt:label:class="ml-5 !text-2xl text-black" pt:icon:class="text-2xl text-black" class="w-3/4 p-button-outlined text-left !py-6 !h-2/4 !bg-white !rounded-3xl hover:!bg-gray-300"></Button>
+          <Button @click="goToCalendario()" icon="pi pi-calendar" label="Calendário" pt:label:class="ml-5 !text-2xl text-black" pt:icon:class="text-2xl text-black" class="w-3/4 p-button-outlined text-left !py-6 !h-2/4 !bg-white !rounded-3xl hover:!bg-gray-300"></Button>
+          <Button @click="goToDocumento()" icon="pi pi-file" label="Documentos" pt:label:class="ml-5 !text-2xl text-black" pt:icon:class="text-2xl text-black" class="w-3/4 p-button-outlined text-left !py-6 !h-2/4 !bg-white !rounded-3xl hover:!bg-gray-300"></Button>
         
       </div>
     </div>
