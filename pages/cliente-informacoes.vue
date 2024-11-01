@@ -6,13 +6,12 @@
     <div class="grid grid-cols-4 grid-rows-3 gap-4 w-5/6  mx-auto mt-24 mb-20">
       <!-- First column -->
       <div class="col-start-2 col-end-4 row-start-1 row-end-1 ">
-        <Card class="!bg-gray-700 text-white h-full relative" >
+        <Card class="!bg-gray-700 text-white relative" >
           <template #title><div class="text-center">Dados Pessoais <i class="pi pi-pencil absolute right-10 top-5 text-xl cursor-pointer" @click="abrirDialogAtualizar"/></div> </template>
           <template #content>
             <hr class="mb-3">
             <div class="flex flex-col text-center"><span class="text-[12px]">NOME: </span><span class="text-3xl">{{ cliente.nome }}</span></div>
             <div class="flex flex-row gap-x-4 justify-center mt-10">
-              
               <hr class="border-l-2 h-12">
               <div class="flex flex-col"><span class="text-[12px] ">CPF: </span><span class="text-lg">{{ formatCpf(cliente.cpf) }}</span></div>
               <hr class="border-l-2 h-12">
@@ -29,12 +28,14 @@
       
       <div class="row-start-2 row-end-2 col-start-1 col-end-3 w-full">
         <Card  class="!bg-gray-700 !text-white h-full">
-          <template #title>Próximas Consultas</template>
+          <template #title>Compromissos</template>
 
           <template #content>
             <hr class="mb-3">
-            <p v-if="agendamentos.length <= 0">Aqui será exibido o conteúdo das próximas consultas.</p>
-            <DataTable :value="agendamentos" tableStyle="min-width: 50rem" paginator :rows="5" v-if="agendamentos.length > 0" @row-click="router.push('/calendario')">
+            <p v-if="agendamentos.length <= 0">Aqui será exibido o conteúdo dos próximos compromissos.</p>
+            <DataTable :value="agendamentos" tableStyle="min-width: 50rem" paginator :rows="5" 
+            v-if="agendamentos.length > 0" @row-click="router.push('/calendario')"
+            class="hover:!cursor-pointer">
               <Column field="titulo" header="Titulo Agendamento" sortable style="width: 25%"></Column>
               <Column field="dataInicio" header="Inicio" sortable style="width: 25%">
                 <template #body="slotProps">
@@ -52,11 +53,11 @@
 
       <div class="row-start-2 row-end-2 col-start-3 col-end-5 ">
       <Card class="w-full !bg-gray-700 text-white h-full">
-          <template #title>Dados Financeiros</template>
+          <template #title>Financeiro</template>
           <template #content>
             <hr class="mb-3">
             <p v-if="!documentos">Aqui serão exibidas as informações financeiras do cliente.</p>
-            <DataTable v-if="documentos" :value="documentos.filter(item => item.tipoDocumento == 'NOTA_FISCAL')" 
+            <DataTable v-if="documentos" :value="documentos.filter(item => item.tipoDocumento == 'NOTA_FISCAL' || item.tipoDocumento == 'BOLETO')" 
               selectionMode="single" paginator :rows="10"
               pt:tablecontainer:class="!rounded-lg !text-center">
 
@@ -69,6 +70,11 @@
               <Column field="nomeCliente" header="Cliente" filterField="nomeCliente">
               </Column>
               <Column field="tipoDocumento" header="Tipo" filterField="tipoDocumento">
+              </Column>
+              <Column header="Valor">
+                <template #body="slotProps">
+                  R${{ slotProps.data.valorDocumento }}
+                </template>
               </Column>
               <Column header="Data Cadastro">
                 <template #body="slotProps">
@@ -116,7 +122,7 @@
           <template #title>Documentos</template>
           <template #content>
             <hr class="mb-3">
-            <DataTable v-if="documentos" :value="documentos.filter(item => item.tipoDocumento != 'NOTA_FISCAL')" 
+            <DataTable v-if="documentos" :value="documentos.filter(item => item.tipoDocumento != 'NOTA_FISCAL' && item.tipoDocumento != 'BOLETO')" 
               selectionMode="single" paginator :rows="5"
               pt:tablecontainer:class="!rounded-lg !text-center">
 
@@ -205,8 +211,18 @@
     <Dialog v-model:visible="dialogCliente" modal header="Atualizar Cliente" :style="{ width: '25rem' }">
     <div class="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
     <form @submit.prevent="atualizarCliente()">
+
+      <label class="block text-gray-700 font-bold mb-2">Foto de perfil</label>
+
+      <label for="file-upload" class="custom-file-upload">
+        Selecionar 
+      </label>
+      <label class="text-black ml-10">{{ nomeDocumentoSelecionado }}</label>
+
+      <input id="file-upload" type="file" @change="onFileSelect" accept=".png, .jpg, .jpeg"/>
+
       <!-- Nome Completo -->
-      <div class="mb-4">
+      <div class="mb-4 mt-4">
         <label for="nomeCompleto" class="block text-gray-700 font-bold mb-2">Nome Completo</label>
         <InputText v-model="nomeCompleto" id="nomeCompleto" placeholder="Digite o nome completo" class="w-full p-inputtext-sm" :required="true"/>
       </div>
@@ -269,6 +285,9 @@ const documentoVisualizar = ref(null)
 
 const dialogVisualizar = ref(false)
 const documentos = ref(null)
+
+const nomeDocumentoSelecionado = ref(null)
+const tipoDocumentoSelecionado = ref(null)
 
 
 function saveByteArray(byte, type, nome) {
@@ -396,9 +415,14 @@ async function suspenderCliente(idCliente){
 }
 
 async function atualizarCliente(){
-  console.log(cliente.value.id);
-  console.log(dataNascimento.value);
-  console.log(nomeCompleto.value);
+
+  if(dataNascimento.value == null){
+    toast.add({severity: 'warn', summary: 'Informe o nome do cliente', life: 3000})
+  }
+
+  if(nomeCompleto.value == null){
+    toast.add({severity: 'warn', summary: 'Informe a data de nascimento do cliente', life: 3000})
+  }
   
   await useFetch('http://localhost:8080/api/cliente/atualizar', {
     method: 'PUT',
@@ -409,7 +433,7 @@ async function atualizarCliente(){
     },
     onResponse({ request, response, options }) {
         if(response.status == 200){
-          nomeCompleto.value = ''
+          nomeCompleto.value = null
           cpf.value = ''
           rg.value = ''
           dataNascimento.value = null
@@ -429,9 +453,61 @@ function abrirDialogAtualizar(){
   nomeCompleto.value = cliente.value.nome
   cpf.value = cliente.value.cpf
   rg.value = cliente.value.rg
-  dataNascimento.value = cliente.value.dataNascimento
+  var dataAux = new Date(cliente.value.dataNascimento)
+  dataAux.setDate(dataAux.getDate()+1)
+  dataNascimento.value = new Date(dataAux)
 
   dialogCliente.value = true
+}
+
+function onFileSelect(event){
+  const file = event.target.files[0];
+      if (file) {
+        tipoDocumentoSelecionado.value = file.type;
+        nomeDocumentoSelecionado.value = file.name;
+        const readerByte = new FileReader();
+        const readerURL = new FileReader();
+
+        // Check for different file types and read accordingly
+        // if (file.type.includes('image')) {
+        //   reader.readAsDataURL(file); // Read image as Data URL for preview
+        // } else if (file.type.includes('text')) {
+        //   reader.readAsText(file); // Read text file as text
+        // } else if (file.type === 'application/pdf') {
+        //   reader.readAsDataURL(file); // PDF preview (as Data URL)
+        // } else {
+        //   reader.readAsArrayBuffer(file); // Fallback for unsupported types
+        // }
+
+        //Leitor para criar o byteArray e enviar ao banco de dados
+        readerByte.readAsArrayBuffer(file);
+
+        readerByte.onload = (e) => {
+          // Set the fileData for preview
+          arrayDocumento.value = e.target.result;
+          console.log(arrayDocumento.value)
+
+        };
+
+        readerByte.onerror = (e) => {
+          console.error("Error reading file", e);
+        };
+
+        //Leitor para transformar o aquivo em base64 para leitura do img e iframe
+        readerURL.readAsDataURL(file);
+
+        readerURL.onload = (e) => {
+          // Set the fileData for preview
+          documentoSelecionado.value = e.target.result;
+          console.log(documentoSelecionado.value)
+        };
+
+        readerURL.onerror = (e) => {
+          console.error("Error reading file", e);
+        };
+
+        
+  }
 }
 
 
@@ -471,5 +547,19 @@ definePageMeta({
 </script>
 
 <style>
+.file-input {
+  @apply border p-2 rounded-lg shadow;
+}
 
+input[type="file"]{
+  display: none;
+}
+
+.custom-file-upload {
+  border: 1px solid black;
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
+  background-color: black;
+}
 </style>

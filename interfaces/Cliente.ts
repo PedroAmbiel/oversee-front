@@ -17,5 +17,9 @@ export enum TipoAgendamento {
 export enum TipoDocumento{
     NOTA_FISCAL = "Nota Fiscal",
     CONTRATO = "Contrato",
+    BOLETO = "Boleto",
+    COMPROVANTE_DE_ENDERECO = "Comprovante de Endereço",
+    RG = "RG",
+    CPF = "CPF",
     OUTRO = "Outro",
 }

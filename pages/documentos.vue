@@ -44,6 +44,11 @@
               {{ formatDateHour(slotProps.data.dataCadastro) }}
             </template>
           </Column>
+          <Column header="Valor" >
+            <template #body="slotProps" >
+              <span v-if="slotProps.data.valorDocumento">R$ </span>{{ slotProps.data.valorDocumento }}
+            </template>
+          </Column>
           <Column field="" header="Visualizar" class="!text-center"
           :pt="{
             columnheadercontent: '!justify-center'
@@ -93,11 +98,15 @@
           </div>
 
           <div class="mb-2 flex flex-col">
-            <label class="text-black">Tipo de Agendamento: *</label>
+            <label class="text-black">Tipo de Documento: *</label>
             <Select v-model="tipoDocumento" :options="tipos" placeholder="Selecione o tipo de documento" class="!w-full md:w-56" >
             </Select>
           </div>
 
+          <div class="mb-2 flex flex-col" v-if="tipoDocumento == 'NOTA_FISCAL'">
+            <label class="text-black">Valor: *</label>
+            <InputNumber v-model="valorDocumento" inputId="minmaxfraction" :minFractionDigits="2" :maxFractionDigits="5"  placeholder="Informe o valor da nota fiscal" class="!w-full md:w-56" />
+          </div>
           
           <div class="p-4">
             <label for="file-upload" class="custom-file-upload">
@@ -170,6 +179,7 @@
 import { format, formatDate } from 'date-fns';
 import { TipoDocumento } from '~/interfaces/Cliente';
 import { FilterMatchMode } from '@primevue/core/api';
+import InputText from 'primevue/inputtext';
 
 const toast = useToast()
 const prestador = userStore()
@@ -184,6 +194,7 @@ const nomeDocumentoSelecionado = ref(null)
 const tipoDocumentoSelecionado = ref(null)
 const arrayDocumento = ref()
 const tipoDocumento = ref('')
+const valorDocumento = ref(null)
   //Cliente
 const clienteSelecionado = ref(null)
 const suspender = ref(false)
@@ -284,6 +295,11 @@ async function novoDocumento(){
     toast.add({severity: 'warn', summary: 'Informe o tipo de documento', life: 3000})
     return
   }
+
+  if(tipoDocumento.value == 'NOTA_FISCAL' && valorDocumento.value == null){
+    toast.add({severity: 'warn', summary: 'Informe o valor do documento', life: 3000})
+    return
+  } 
   //console.log(new Uint8Array(arrayDocumento.value))
   await useFetch('http://localhost:8080/api/documentos/novo', {
     method: 'POST',
@@ -295,6 +311,7 @@ async function novoDocumento(){
       tipoDocumento: tipoDocumento.value,
       nomeArquivo: nomeDocumentoSelecionado.value.split('.')[0],//Pegar o nome ate a extensão do arquivo
       extensaoDocumento: tipoDocumentoSelecionado.value,
+      valorDocumento: valorDocumento.value
     },
     onResponse({ request, response, options }) {
         if(response.status == 200){
@@ -305,6 +322,7 @@ async function novoDocumento(){
           tipoDocumento.value = ''
           clienteSelecionado.value = null
           suspender.value = false
+          valorDocumento.value = null
           
           dialogVisible.value = false
           buscarDocumentos()
@@ -403,6 +421,10 @@ onMounted(() => {
   for (var tipo in TipoDocumento) {
     tipos.push(tipo)
   }
+})
+
+definePageMeta({
+  middleware: 'auth'
 })
 
 </script>
