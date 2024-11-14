@@ -25,7 +25,7 @@
         <span class="text-2xl">{{ day.name }}</span>
         <div v-for="(date, index) in day.days" :key="index">
 
-          <div class="border p-1 h-40 w-auto relative text-left overflow-y-auto bg-[#3d3d3d]" :class="new Date().getDate() == date.date ? `!bg-[#202020]` : `` " v-if="date != 0">
+          <div class="border p-1 h-40 w-auto relative text-left overflow-y-auto bg-[#3d3d3d]" :class="(new Date().getDate() == date.date && new Date().getMonth() == selectedMonth-1)  ? `!bg-[#202020]` : `` " v-if="date != 0">
             <Button @click="openDialog(date)" class="!absolute right-2 !bg-white !border-black hover:!bg-gray-300"><span>{{ date.date }}</span></Button>
             <!-- Show appointments -->
             <div v-tooltip.top="appointment.titulo" v-for="appointment in date.appointments"  :key="appointment.id" :class="appointment.cancelado ? `!bg-red-500 line-through hover:!bg-red-600` : `!bg-white hover:!bg-gray-300`" class=" text-black p-1 first-of-type:mt-12 mt-1 rounded overflow-hidden hover:!cursor-pointer" @click="dialogDetalhes(appointment, date.date)">

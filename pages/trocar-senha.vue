@@ -83,13 +83,13 @@
       <div class="text-center">
         <p class="text-sm text-gray-400">
           Lembrou sua senha? 
-          <a href="/login" class="text-blue-400 hover:underline">Ir para login</a>
+          <a href="/" class="text-blue-400 hover:underline">Ir para login</a>
         </p>
       </div>
     </div>
     <div class="flex flex-col w-full max-w-md bg-gray-900 p-8 rounded-lg shadow-md text-center" v-if="msgEnviado">
       <span>{{ msgEnviado }}</span>
-      <NuxtLink class="mt-2 text-sm text-blue-400 hover:underline" to="/login">Voltar</NuxtLink>
+      <NuxtLink class="mt-2 text-sm text-blue-400 hover:underline" to="/">Voltar</NuxtLink>
     </div>
   </div>
 </template>

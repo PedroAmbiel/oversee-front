@@ -1,41 +1,106 @@
 <template>
-  <div class="dark:bg-surface-950 px-6 py-20 md:px-12 lg:px-20">
-      <div class="bg-surface-0 dark:bg-surface-900 p-6 shadow rounded-border w-full lg:w-6/12 mx-auto">
-          <div class="text-center mb-10">
-              <svg class="mb-4 mx-auto fill-surface-600 dark:fill-surface-200 h-16" viewBox="0 0 30 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                      d="M20.7207 6.18211L14.9944 3.11148L3.46855 9.28678L0.579749 7.73444L14.9944 0L23.6242 4.62977L20.7207 6.18211ZM14.9996 12.3574L26.5182 6.1821L29.4216 7.73443L14.9996 15.4621L6.37724 10.8391L9.27337 9.28677L14.9996 12.3574ZM2.89613 16.572L0 15.0196V24.2656L14.4147 32V28.8953L2.89613 22.7132V16.572ZM11.5185 18.09L0 11.9147V8.81001L14.4147 16.5376V25.7904L11.5185 24.2312V18.09ZM24.2086 15.0194V11.9147L15.5788 16.5377V31.9998L18.475 30.4474V18.09L24.2086 15.0194ZM27.0969 22.7129V10.3623L30.0004 8.81V24.2653L21.3706 28.895V25.7904L27.0969 22.7129Z"
-                  />
-              </svg>
+  <Toast position="top-left" />
+  <div class="flex min-h-screen text-black">
+    <!-- Left Panel (Login Form) -->
+    <div class="w-full lg:w-1/3 bg-gray-400/90 flex flex-col justify-center items-center p-8 shadow-lg">
+      <img src="../assets/images/over.png" class="w-32" :hidden="!focus">
+      <img src="../assets/images/over0.png" class="w-32" :hidden="focus">
+      <div class="text-center mb-8">
+        <h1 class="text-7xl font-bold mb-2">Oversee</h1>
+        <p class="text-black">Seja bem vindo! <a href="/cadastro-prestador" class="text-blue-700 hover:underline">Registrar</a></p>
+      </div> 
 
-              <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">Bem Vindo!</div>
-              <span class="text-surface-600 dark:text-surface-200 font-medium leading-normal">Não tem uma conta?</span>
-              <a class="font-medium no-underline ml-2 text-primary cursor-pointer">Crie agora!</a>
-          </div>
+      <div class="w-full max-w-xs">
+        <form @submit.prevent="validarLogin">
+        <!-- Email -->
+        <div class="mb-6">
+          <FloatLabel>
+              <InputText id="usuario" v-model="email" class="w-full !bg-white !text-black !border-white"/>
+              <label for="usuario" class="!text-gray-500">Usuário</label>
+          </FloatLabel>
+        </div>
 
-          <div>
-              <label for="email1" class="text-surface-900 dark:text-surface-0 font-medium mb-2 block">Email</label>
-              <InputText id="email1" type="text" placeholder="Email address" class="w-full mb-4" />
+        <!-- Password -->
+        <div class="mb-5">
+          <FloatLabel>
+            <Password v-model="password" inputId="senha" pt:root="!w-full" inputClass="w-full !bg-white !text-black !border-white" 
+            @focus="focus = false" @blur="focus = true" :feedback="false" toggleMask />
+            <label for="senha" class="!text-gray-500">Senha</label>
+          </FloatLabel>
+          <NuxtLink to="/trocar-senha" class="text-blue-700 text-sm hover:underline"><span>Esqueci minha senha</span></NuxtLink>
+        </div>
 
-              <label for="password1" class="text-surface-900 dark:text-surface-0 font-medium mb-2 block">Senha</label>
-              <InputText id="password1" type="password" placehoder="Password" class="w-full mb-4" />
+        <!-- Remember Me -->
+        <!-- <div class="mb-4">
+          <label class="inline-flex items-center">
+            <Checkbox v-model="checked" :binary="true" pt:input:class="!bg-white"
+            :pt="{
+              box: (options) =>({
+                class: [
+                  '!border-none',
+                {
+                  '!bg-white' : !checked,
+                  '!bg-green-400' : checked,
+                }
 
-              <div class="flex items-center justify-between mb-12 text-black">
-                  <div class="flex items-center">
-                      <Checkbox id="rememberme1" v-model="checked1" :binary="true" class="mr-2" />
-                      <label for="rememberme1">Lembre-me</label>
-                  </div>
-                  <a class="font-medium no-underline ml-2 text-primary text-right cursor-pointer">Esqueceu sua senha?</a>
-              </div>
 
-              <Button label="Sign In" icon="pi pi-user" class="w-full" />
-          </div>
+                ]})
+              }"
+            />
+            <span class="ml-2 text-white">Lembre-me</span>
+          </label>
+        </div> -->
+
+        <!-- Login Button -->
+        <div class="mb-4">
+          <button class="bg-black text-white w-full py-2 rounded-lg shadow-md hover:bg-gray-800 transition-all hover:-translate-y-1" type="submit">
+            Login
+          </button>
+        </div>
+      </form>
+        <!-- Login with Google -->
+        <!-- <div class="mb-4">
+          <button class="w-full flex items-center justify-center bg-gray-200 py-2 rounded-lg shadow-md hover:bg-gray-300 transition-all">
+            <i class="pi pi-google text-xl mr-2"></i>
+            Login with Google
+          </button>
+        </div> -->
       </div>
+    </div>
+
+    <!-- Right Panel (Background Image) -->
+    <div class="hidden lg:block w-2/3 bg-cover bg-center bg-[url(~/assets/images/login_template.jpg)] opacity-20" />
+    <!-- </div> -->
   </div>
 </template>
-<script setup>
 
-const checked1 = ref(true);
+<script setup>
+import Toast from 'primevue/toast';
+  const toast = useToast()
+  const user = userStore()
+
+  const email = ref('')
+  const password = ref('')
+  const focus = ref(true)
+
+    
+  async function validarLogin(){
+    if(!email.value || !password.value){
+      toast.add({severity: 'error', summary: "Informe o usuário e senha", life: 3000})
+      return false
+    }
+
+    var msg = await user.login(email.value, password.value)
+  
+    if(msg == 'T'){
+      useRouter().push('/painel')
+    }else{
+      toast.add({severity: 'error', summary: msg, life: 3000})
+    }
+  }
+
 </script>
+
+<style>
+
+</style>

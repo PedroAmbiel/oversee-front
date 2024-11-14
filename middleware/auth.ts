@@ -8,10 +8,10 @@ export default defineNuxtRouteMiddleware((to, from) => {
     //     userStore().possuiEmpresaCadastrada()
     // }
     
-    if(to.path != '/login' && !userStore().isAutenticado()){
-        return navigateTo('/login')
+    if(to.path != '/' && !userStore().isAutenticado()){
+        return navigateTo('/')
     }else if(to.path != '/novo-prestador' && !userStore().isAutenticado()){
-        return navigateTo('/login') 
+        return navigateTo('/') 
     }
 
 })

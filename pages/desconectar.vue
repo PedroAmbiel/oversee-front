@@ -7,7 +7,7 @@
 <script lang="ts" setup>
   const auth = userStore()
   auth.limparUserStore();
-  useRouter().push('/login')
+  useRouter().push('/')
 </script>
 
 <style>

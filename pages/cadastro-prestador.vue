@@ -55,7 +55,7 @@
           <!-- Login Link -->
           <p class="text-center mt-4 text-black">
             Já tem uma conta?
-            <a href="/login" class="text-blue-500 hover:underline">Ir para login</a>
+            <a href="/" class="text-blue-500 hover:underline">Ir para login</a>
           </p>
         </form>
       </div>
@@ -92,7 +92,7 @@
       onResponse({request, response, options}){
         if(response.status == 200){
           toast.add({severity: 'success', summary: response._data, life: 5000})
-          useRouter().push("/login")
+          useRouter().push("/")
         }
       },
 
